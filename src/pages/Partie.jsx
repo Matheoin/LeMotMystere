@@ -1,10 +1,25 @@
+import { useState } from "react";
 import { Navigate } from "react-router";
 import Grille from "../components/Grille";
+import mots from "../data/mots_solutions.json";
 
 export default function Partie() {
     const pseudo = localStorage.getItem("pseudo");
-    const motsParPseudo = JSON.parse(localStorage.getItem("motsParPseudo") ?? "{}");
-    const motMystere = motsParPseudo[pseudo];
+    const [motMystere, setMotMystere] = useState(() => JSON.parse(localStorage.getItem("motsParPseudo") ?? "{}")[pseudo]);
+    
+    function recommencer() {
+        const nouveauMot = mots[Math.floor(Math.random() * mots.length)].toUpperCase(); // à Changer plus tard
+        const motsParPseudo = JSON.parse(localStorage.getItem("motsParPseudo") ?? "{}");
+
+        motsParPseudo[pseudo] = nouveauMot;
+        localStorage.setItem("motsParPseudo", JSON.stringify(motsParPseudo));
+
+        const essaisParPseudo = JSON.parse(localStorage.getItem("essaisParPseudo") ?? "{}");
+        delete essaisParPseudo[pseudo];
+        localStorage.setItem("essaisParPseudo", JSON.stringify(essaisParPseudo));
+
+        setMotMystere(nouveauMot);
+    }
 
     if (!motMystere) return <Navigate to="/" />;
 
@@ -12,7 +27,8 @@ export default function Partie() {
         <>
             <h1>Le Mot Mystère</h1>
             <p>Joueur : {pseudo}</p>
-            <Grille pseudo={pseudo} motMystere={motMystere} />
+            <p>{motMystere}</p>
+            <Grille pseudo={pseudo} motMystere={motMystere} onRecommencer={recommencer} />
         </>
     );
 }

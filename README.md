@@ -30,7 +30,7 @@ Attendus :
 - [x] les lettres se tapent au clavier, la touche Retour arrière efface, la touche Entrée valide une ligne complète ;
 - [x] après validation, chaque lettre prend la bonne couleur, y compris quand une lettre apparaît plusieurs fois dans la proposition ou dans le mot ;
 - [x] la victoire et la défaite sont détectées ; en cas de défaite, le mot est révélé ;
-- [ ] à la fin de la partie, le joueur voit les points obtenus, et peut lancer une nouvelle partie ou revenir à l'accueil ;
+- [x] à la fin de la partie, le joueur voit les points obtenus, et peut lancer une nouvelle partie ou revenir à l'accueil ;
 - [ ] la logique du jeu (comparaison d'une proposition avec le mot, état de la partie) est écrite dans des fonctions séparées des composants d'affichage.
 ### Palier 2 : le dictionnaire
 Seuls les vrais mots sont acceptés.

@@ -10,7 +10,7 @@ export default function Accueil() {
         const motsParPseudo = JSON.parse(localStorage.getItem("motsParPseudo") ?? "{}");
         
         if (!motsParPseudo[pseudo]) {
-            motsParPseudo[pseudo] = mots[Math.floor(Math.random() * mots.length)].toUpperCase(); // Mot choisi au hasard
+            motsParPseudo[pseudo] = mots[Math.floor(Math.random() * mots.length)].toUpperCase(); // à changer plus tard
             localStorage.setItem("motsParPseudo", JSON.stringify(motsParPseudo));
         }
 

@@ -4,10 +4,12 @@ import EnTete from "./components/EnTete.jsx";
 import Accueil from "./pages/Accueil.jsx";
 import Partie from "./pages/Partie.jsx";
 
+/*
 function lireReponse(response) {
     if (!response.ok) throw new Error(`Erreur ${response.status}`);
     return response.json();
 }
+*/
 
 export default function App() {
 
