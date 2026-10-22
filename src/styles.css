@@ -1,0 +1,45 @@
+.grille { 
+    display: grid; 
+    gap: 6px; 
+    justify-content: center; 
+}
+
+.ligne { 
+    display: grid; 
+    grid-template-columns: repeat(5, 3rem); 
+    gap: 6px; 
+}
+
+.case { 
+    height: 3rem; 
+    border: 2px solid #999; 
+    display: grid; 
+    place-items: center;
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+}
+
+.case.vert  { 
+    background: #538d4e; 
+    border-color: #538d4e; 
+    color: white; 
+}
+
+.case.jaune { 
+    background: #b59f3b; 
+    border-color: #b59f3b; 
+    color: white; 
+}
+
+.case.gris { 
+    background: #787c7e; 
+    border-color: #787c7e; 
+    color: white; 
+}
+
+.message { 
+    text-align: center; 
+    font-size: 1.2rem; 
+}
+
