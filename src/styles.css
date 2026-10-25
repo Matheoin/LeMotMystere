@@ -10,6 +10,22 @@
     gap: 6px; 
 }
 
+.ligne.rouge .case {
+    background: #c0392b;
+    border-color: #c0392b;
+    color: white;
+}
+
+.ligne.rouge { /* tremblement */
+    animation: trembler 0.3s;
+}
+
+@keyframes trembler {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
 .case { 
     height: 3rem; 
     border: 2px solid #999; 

@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Navigate } from "react-router";
 import Grille from "../components/Grille";
 import mots from "../data/mots_solutions.json";
+// *** ajout après la soutenance
+import { motDuJour } from "../logique/motDuJour";
+// ***
 
 export default function Partie() {
     const pseudo = localStorage.getItem("pseudo");
-    const [motMystere, setMotMystere] = useState(() => JSON.parse(localStorage.getItem("motsParPseudo") ?? "{}")[pseudo]);
+    const [motMystere, setMotMystere] = useState(() => motDuJour);
     
     function recommencer() {
         const nouveauMot = mots[Math.floor(Math.random() * mots.length)].toUpperCase(); // à Changer plus tard

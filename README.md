@@ -4,11 +4,6 @@
 Mathéo
 
 ## Installation et lancement
-### Lancer l'API du Wiktionnaire
-```bash
-npm install
-npm start
-```
 ### Lancer l'application
 ```bash
 npm install
@@ -20,6 +15,7 @@ npm run dev
 ### Bibliothèques ajoutées
 
 ## Les paliers
+"***" : Fait après la soutenance.
 ### Palier 1 : le jeu
 Une page d'accueil et une partie complète, jouable au clavier de l'ordinateur.
 Attendus :
@@ -35,11 +31,11 @@ Attendus :
 ### Palier 2 : le dictionnaire
 Seuls les vrais mots sont acceptés.
 Attendus :
-- [ ] avant d'être colorée, chaque proposition est vérifiée auprès du Wiktionnaire : seuls les mots français sont acceptés ;
-- [ ] un mot refusé ne compte pas comme un essai ; le joueur en est averti et la ligne le montre visuellement ;
-- [ ] pendant la vérification, le joueur voit que l'application travaille, et ne peut pas valider une seconde fois ;
+- [x] avant d'être colorée, chaque proposition est vérifiée auprès du Wiktionnaire : seuls les mots français sont acceptés ;
+- [x] un mot refusé ne compte pas comme un essai ; le joueur en est averti et la ligne le montre visuellement ;
+- [x] pendant la vérification, le joueur voit que l'application travaille, et ne peut pas valider une seconde fois ;
 - [ ] si l'API ne répond pas, le joueur en est informé et la partie n'est pas bloquée : décidez d'un comportement raisonnable et justifiez-le dans le README ;
-- [ ] à la fin de la partie, le mot mystère est affiché avec ses accents et un lien vers sa page du Wiktionnaire.
+- [x] *** à la fin de la partie, le mot mystère est affiché avec ses accents et un lien vers sa page du Wiktionnaire.
 ### Palier 3 : le confort de jeu
 Le jeu devient agréable.
 Attendus :
@@ -85,3 +81,6 @@ Attendus :
 - [ ] un écran de fin indique les grilles résolues, en combien d'essais, et révèle les mots manqués ;
 - [ ] les parties à quatre grilles ont leur propre règle de points, que vous définissez et expliquez dans les règles du jeu, et leur propre classement.
 ## Difficultés rencontrées et résolutions
+
+
+Préciser ce qui à été fait avant et après la soutenance du vendredi 23 octobre 2026

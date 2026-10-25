@@ -6,14 +6,7 @@ import mots from "../data/mots_solutions.json";
 export default function Accueil() {
     const naviguer = useNavigate();
 
-    function valider({ pseudo }) {
-        const motsParPseudo = JSON.parse(localStorage.getItem("motsParPseudo") ?? "{}");
-        
-        if (!motsParPseudo[pseudo]) {
-            motsParPseudo[pseudo] = mots[Math.floor(Math.random() * mots.length)].toUpperCase(); // à changer plus tard
-            localStorage.setItem("motsParPseudo", JSON.stringify(motsParPseudo));
-        }
-
+    function valider() {
         naviguer("/partie");
     }
 
