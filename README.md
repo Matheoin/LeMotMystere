@@ -39,13 +39,13 @@ Attendus :
 ### Palier 3 : le confort de jeu
 Le jeu devient agréable.
 Attendus :
-- [ ] un clavier à l'écran, utilisable à la souris ou au doigt, dont les touches prennent la couleur de ce qu'on sait déjà de chaque lettre ;
-- [ ] les lettres se retournent une à une à la validation, et la ligne tremble quand un mot est refusé ;
-- [ ] un tableau des scores : les dix meilleures parties, classées par points, avec pour chacune le pseudo, le mot trouvé, le nombre d'essais, les points et la date ; plusieurs joueurs peuvent se succéder sur le même ordinateur et apparaître dans le même tableau ; le tableau est conservé entre deux visites ;
-- [ ] un écran de statistiques du joueur : parties jouées, pourcentage de victoires, série en cours, meilleure série, total des points, répartition des victoires selon le nombre d'essais ;
-- [ ] la page d'accueil donne accès à une nouvelle partie, au tableau des scores, aux statistiques et aux règles ;
-- [ ] un écran de règles, avec un exemple illustré des trois couleurs ;
-- [ ] chaque écran a sa propre adresse.
+- [x] *** un clavier à l'écran, utilisable à la souris ou au doigt, dont les touches prennent la couleur de ce qu'on sait déjà de chaque lettre ;
+- [x] *** les lettres se retournent une à une à la validation, et la ligne tremble quand un mot est refusé ;
+- [x] *** un tableau des scores : les dix meilleures parties, classées par points, avec pour chacune le pseudo, le mot trouvé, le nombre d'essais, les points et la date ; plusieurs joueurs peuvent se succéder sur le même ordinateur et apparaître dans le même tableau ; le tableau est conservé entre deux visites ;
+- [x] *** un écran de statistiques du joueur : parties jouées, pourcentage de victoires, série en cours, meilleure série, total des points, répartition des victoires selon le nombre d'essais ;
+- [x] *** la page d'accueil donne accès à une nouvelle partie, au tableau des scores, aux statistiques et aux règles ;
+- [x] *** un écran de règles, avec un exemple illustré des trois couleurs ;
+- [x] *** chaque écran a sa propre adresse.
 ### Palier 4 : le mot du jour
 Comme dans le jeu original, tout le monde cherche le même mot chaque jour, et le jeu est accessible en
 ligne.

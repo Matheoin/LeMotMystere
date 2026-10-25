@@ -3,7 +3,7 @@ import { Navigate } from "react-router";
 import Grille from "../components/Grille";
 import mots from "../data/mots_solutions.json";
 // *** ajout après la soutenance
-import { motDuJour } from "../logique/motDuJour";
+import { motDuJour, numeroDuJour } from "../logique/motDuJour";
 // ***
 
 export default function Partie() {
@@ -18,7 +18,7 @@ export default function Partie() {
         localStorage.setItem("motsParPseudo", JSON.stringify(motsParPseudo));
 
         const essaisParPseudo = JSON.parse(localStorage.getItem("essaisParPseudo") ?? "{}");
-        delete essaisParPseudo[pseudo];
+        delete essaisParPseudo[`${pseudo}-${numeroDuJour()}`];
         localStorage.setItem("essaisParPseudo", JSON.stringify(essaisParPseudo));
 
         setMotMystere(nouveauMot);

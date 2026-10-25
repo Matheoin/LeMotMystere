@@ -1,80 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { POINTS } from "../data/pointsObtenus.js";
+
+// *** Ajout après la soutenance
 import { numeroDuJour } from "../logique/motDuJour.jsx";
-
-function lireReponse(response) {
-    if (!response.ok) throw new Error(`Erreur ${response.status}`);
-    return response.json();
-}
-
-function verifierMot(mot) {
-    const page = encodeURIComponent(mot.toLowerCase()); 
-
-    return (
-        fetch(`https://fr.wiktionary.org/w/api.php?action=parse&page=${page}&prop=tocdata&format=json&formatversion=2&origin=*`, {
-            method: "GET", 
-            headers: { "Api-User-Agent": "LeMotMystere/json" }
-        })
-            .then(lireReponse)
-            .then((data) => {
-                if (data.error) return false; // data.error : c'est ainsi qu'on detecte qu'un mot n'existe pas // La page n'existe pas
-                return data.parse.tocdata.sections.some((section) => section.anchor === "Français");
-            })
-    );
-}
-
-// *** ajouter après la soutenance
-function afficherMot(mot) {
-    const page = mot.toLowerCase();
-
-    return (
-        fetch(`https://fr.wiktionary.org/w/api.php?action=query&list=search&srsearch=intitle:${page}&format=json&formatversion=2&origin=*`, {
-            method: "GET",
-            headers: { "Api-User-Agent": "LeMotMystere/json" }
-        })
-            .then(lireReponse)
-            .then(async (data) => {
-                if (data.query.search.some((titre) => titre.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "") === page)) {
-                    const responses = data.query.search
-                        .map((r) => r.title)
-                        .filter((t) => t === t.toLowerCase() && t.normalize("NFD".replace(/[\u0300-\u036f]/g, "").normalize("NFC") === page))
-                        .sort((a, b) => (a === page ? -1 : b === page ? 1 : 0));
-                    for (const titre of responses) {
-                        if (await verifierMot(titre)) return titre;
-                    }
-                }
-                return page;
-            })
-    );
-}
+import { verifierMot, afficherMot, colorer, etatsLettres } from "../logique/jeu.jsx";
+import { enregistrerPartie } from "../logique/historique.jsx";
+import Clavier from "./Clavier.jsx";
 // ***
-
-function colorer(proposition, mot) {
-    const couleurs = Array(5).fill("gris");
-    const restantes = {};
-
-    // 1er passage : les lettres bien placées
-    for (let i = 0 ; i < 5 ; i++) {
-        if (proposition[i] === mot[i]) {
-            couleurs[i] = "vert";
-        }
-        else {
-            restantes[mot[i]] = (restantes[mot[i]] ?? 0) + 1;
-        }
-    }
-
-    // 2ème passage : les lettres mal placées
-    for (let i = 0 ; i < 5 ; i++) {
-        if (couleurs[i] === "vert") continue;
-        const lettre = proposition[i];
-        if (restantes[lettre] > 0) {
-            couleurs[i] = "jaune";
-            restantes[lettre]--;
-        }
-    }
-    return couleurs;
-}
 
 export default function Grille({ pseudo, motMystere, onRecommencer }) {
     const naviguer = useNavigate();
@@ -92,6 +25,9 @@ export default function Grille({ pseudo, motMystere, onRecommencer }) {
 
     const gagne = essais.includes(motMystere);
     const perdu = !gagne && essais.length === 6;
+    // *** Ajout après la soutenance
+    const points = gagne ? POINTS[essais.length - 1] : 0;
+    // *** 
 
     function recommencer() {
         setEssais([]);
@@ -108,67 +44,96 @@ export default function Grille({ pseudo, motMystere, onRecommencer }) {
     }, [gagne, perdu, motMystere]);
 
     useEffect(() => {
+        if (!(gagne || perdu)) return;
+        enregistrerPartie({
+            id: `${cle}-${motMystere}`,
+            pseudo,
+            mot: motMystere,
+            gagne,
+            essais: essais.length,
+            points,
+            date: new Date().toISOString(),
+        });
+    }, [gagne, perdu]);
+
+
+    function toucher(touche) {
+        if (gagne || perdu) return;
+
+        if (touche === "EFFACER" && !verification) {
+            setSaisie(saisie.slice(0, -1));
+            setInvalide(false);
+        }
+        else if (touche === "ENTREE") {
+            if (saisie.length !== 5 || verification) return;
+            setVerification(true);
+            setMessage("");
+            setInvalide(false);
+
+            verifierMot(saisie)
+                .then((existe) => {
+                    if (!existe) {
+                        setMessage("Ce mot n'existe pas ou n'est pas français !");
+                        setInvalide(true);
+                        return;
+                    }
+                    const nouveauxEssais = [...essais, saisie];
+                    setEssais(nouveauxEssais);
+                    setSaisie("");
+
+                    const essaisParPseudo = JSON.parse(localStorage.getItem("essaisParPseudo") ?? "{}");
+                    essaisParPseudo[cle] = nouveauxEssais;
+                    localStorage.setItem("essaisParPseudo", JSON.stringify(essaisParPseudo));
+                })
+                .catch(() => {
+                    setMessage("L'API ne répond pas");
+                })
+                .finally(() => setVerification(false));
+        }
+        else if (/^[A-Z]$/.test(touche) && saisie.length < 5) {
+            setSaisie(saisie + touche);
+            setInvalide(false);
+        }
+    }
+
+    useEffect(() => {
         function appuyer(e) {
-            if (gagne || perdu) return;
-
-            if (e.key === "Backspace" && !verification) {
-                setSaisie(saisie.slice(0, -1));
-                setInvalide(false);
-            }
-            else if (e.key === "Enter") {
-                if (saisie.length !== 5 || verification) return;
-                setVerification(true);
-                setMessage("");
-
-                verifierMot(saisie)
-                    .then((existe) => {
-                        if (!existe) {
-                            setMessage("Ce mot n'existe pas ou n'est pas français !");
-                            setInvalide(true);
-                            return;
-                        }
-                        const nouveauxEssais = [...essais, saisie];
-                        setEssais(nouveauxEssais);
-                        setSaisie("");
-
-                        const essaisParPseudo = JSON.parse(localStorage.getItem("essaisParPseudo") ?? "{}");
-                        essaisParPseudo[cle] = nouveauxEssais;
-                        localStorage.setItem("essaisParPseudo", JSON.stringify(essaisParPseudo));
-                    })
-                    .catch(() => {
-                        setMessage("L'API ne répond pas");
-                    })
-                    .finally(() => setVerification(false));
-            }
-            else if (/^[a-z]$/i.test(e.key) && saisie.length < 5) { // /^[a-z]$/i.test(e.key) : Vérifie que la touche préssé est une seule lettre
-                setSaisie(saisie + e.key.toUpperCase());
-                setInvalide(false);
-            }
+            if (e.key === "Backspace") toucher("EFFACER");
+            else if (e.key === "Enter") toucher("ENTREE");
+            else if (/^[a-z]$/i.test(e.key)) toucher(e.key.toUpperCase()); // /^[a-z]$/i.test(e.key) : Vérifie que la touche préssé est une seule lettre
         }
         window.addEventListener("keydown", appuyer);
         return () => window.removeEventListener("keydown", appuyer);
-    }, [saisie, essais, gagne, perdu, verification, pseudo, invalide]);
+    });
 
     return (
         <div className="grille">
             {Array.from({ length: 6 }, (_, i) => {
                 const mot = i < essais.length ? essais[i] : i === essais.length ? saisie : "";
                 const couleurs = i < essais.length ? colorer(essais[i], motMystere) : [];
+                const retourne = i === essais.length - 1;
                 return(
                     <div className={`ligne ${i === essais.length && invalide ? "rouge" : ""}`} key={i}>
                         {Array.from({ length: 5 }, (_, j) => (
-                            <div className={`case ${couleurs[j] ?? ""}`} key={j}>{mot[j] ?? ""}</div>
+                            <div
+                                className={`case ${couleurs[j] ?? ""} ${retourne ? "retourne" : ""}`}
+                                style={retourne ? { animationDelay: `${j * 300}ms` } : undefined}
+                                key={j}
+                            >
+                                {mot[j] ?? ""}
+                            </div>
                         ))}
                     </div>
                 );
             })}
             {message && <p>{message}</p>}
+            {!(gagne || perdu) && <Clavier etats={etatsLettres(essais, motMystere)} onTouche={toucher} />}
             {(gagne || perdu) && 
                 <>
                     <div>
                         {gagne && <h3 className="message">Victoire !</h3>}
                         {perdu && <h3 className="message">Perdu !</h3>}
-                        <p className="message"><i>Vous obtenez <strong>{POINTS[essais.length - 1]} points</strong></i></p>
+                        <p className="message"><i>Vous obtenez <strong>{points} points</strong></i></p>
 
                         <p className="message">Le mot était :</p>
                         <h2 className="message">

@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router";
 import Presentation from "../components/Presentation.jsx";
 import Formulaire from "../components/Formulaire.jsx";
-import mots from "../data/mots_solutions.json";
+// *** Ajout après soutenance
+import { useNavigate, Link } from "react-router";
 
 export default function Accueil() {
     const naviguer = useNavigate();
@@ -15,6 +15,11 @@ export default function Accueil() {
             <h1>Le Mot Mystère</h1>
             <Presentation />
             <Formulaire onValider={valider}/>
+            <nav className="menu">
+                <Link to="/scores">Tableau des scores</Link>
+                <Link to="/statistiques">Statistiques</Link>
+                <Link to="/regles">Règles</Link>
+            </nav>
         </>
     );
 }
