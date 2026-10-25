@@ -1,0 +1,12 @@
+# Dépendances installées par « npm install »
+node_modules/
+
+# Build généré par « Vite » (npm run build)
+dist/
+
+# Log « npm »
+npm-debug.log*
+
+# Fichier système / éditeur
+.DS_Store
+.vscode/
